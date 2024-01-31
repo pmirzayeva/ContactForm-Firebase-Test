@@ -1,7 +1,7 @@
 
   // Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
-  import { getDatabase, ref, child, push, update } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-database.js";
+  import { getDatabase, ref, push, onValue,get,remove } from "https://www.gstatic.com/firebasejs/10.7.2/firebase-database.js";
   const firebaseConfig = {
     apiKey: "AIzaSyCnW2PBJRaDJNTfGPFGpItNyadT4zMFTuk",
     authDomain: "my-first-project-a4387.firebaseapp.com",
@@ -25,6 +25,8 @@ const contactTextarea = document.querySelector("#contactTextarea");
 const contactSendBtn = document.querySelector("#contactSendBtn");
 const alertSuccessMessage = document.querySelector(".alert-success");
 const alertErrorMessage = document.querySelector(".alert-danger");
+const contactDetailTable=document.querySelector(".contactDetailTable")
+
 
 function hideAlert(alertElement) {
   alertElement.classList.add('alert-hidden');
@@ -78,6 +80,63 @@ contactSendBtn.addEventListener("click", async function (e) {
       contactTextarea.value = "";
     }, 3000);
   } catch (error) {
-    console.error("Error sending contact information to Firebase:", error);
+    console.error(error);
   }
 });
+
+
+
+
+
+const fetchContactData = async () => {
+    try {
+        const snapshot = await get(ref(db, "contact"));
+        const contactData = snapshot.val();
+
+        let id=1
+        let contactArrData = Object.entries(contactData);
+        let contactItem = contactArrData.map(([key, value]) => `
+            <tr>
+                <td>${id++}</td>
+                <td>${value.contactFullname}</td>
+                <td>${value.contactAddress}</td>
+                <td>${value.contactEmail}</td>
+                <td>${value.contactPhone}</td>
+                <td><button class="del" data-key="${key}">Delete</button></td>
+            </tr>
+        `).join("");
+
+        contactDetailTable.innerHTML = contactItem;
+        attachDeleteEventListeners();
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+function attachDeleteEventListeners() {
+    const deleteButtons = document.querySelectorAll('.del');
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const key = this.getAttribute('data-key');
+            console.log(key); 
+            deleteContact(key);
+        });
+    });
+}
+
+const deleteContact = async (key) => {
+    console.log(key); 
+    try {
+        await remove(ref(db, `contact/${key}`)); 
+        alert("Contact deleted successfully");
+        fetchContactData(); 
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+
+onValue(ref(db, "contact"), () => {
+    fetchContactData();
+});
+
