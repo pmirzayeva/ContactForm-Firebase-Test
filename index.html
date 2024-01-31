@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index.css">
+    <title>ContactUs</title>
+</head>
+<body>
+
+    <div class="alert alert-danger" role="alert">
+        Please fill in the fields correctly
+    </div>
+    <div class="alert alert-success" role="alert">
+        Completed successfully
+    </div>
+
+    <section class="input-section">
+        <div class="main-container mx-auto p-0">
+            <div class="contact-title-box">
+                <h2 class="contact-us">Contact Us</h2>
+            </div>
+
+            <form class="form-container" >
+                <div class="form-control1">
+                    <input type="text" name="" id="contactFullname" placeholder="Full Name" required>
+                    <input  type="text" name=""  id="contactEmail" placeholder="Email" required>
+                </div>
+                <div class="form-control2">
+                    <input type="text" name=""  id="contactAddress" placeholder="Address" required>
+                    <input type="number" name=""  id="contactPhone" placeholder="Phone" required>
+                </div>
+                <div class="form-control3">
+                    <textarea id="contactTextarea"  placeholder="Note" required></textarea>
+                </div>
+
+                <div class="send-button-box">
+                    <button id="contactSendBtn">Send</button>
+                </div>
+            </form>
+
+        </div>
+
+    </section>
+    
+    <script src="./index.js" type="module"></script>
+</body>
+</html>
